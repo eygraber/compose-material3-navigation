@@ -2,6 +2,7 @@ package com.eygraber.compose.material3.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetValue.Expanded
 import androidx.compose.material3.SheetValue.Hidden
@@ -36,7 +37,7 @@ public fun NavGraphBuilder.bottomSheet(
   route: String,
   arguments: List<NamedNavArgument> = emptyList(),
   deepLinks: List<NavDeepLink> = emptyList(),
-  modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
+  modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
   skipPartiallyExpanded: Boolean = false,
   content: @Composable (NavBackStackEntry) -> Unit,
 ) {
@@ -76,7 +77,7 @@ public fun NavGraphBuilder.bottomSheet(
 public inline fun <reified T : Any> NavGraphBuilder.bottomSheet(
   typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = emptyMap(),
   deepLinks: List<NavDeepLink> = emptyList(),
-  modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
+  modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
   skipPartiallyExpanded: Boolean = false,
   noinline content: @Composable (NavBackStackEntry) -> Unit,
 ) {

@@ -30,7 +30,7 @@ jobs:
           gradle-version: wrapper
 
       - name: Run assemble task
-        run: ./gradlew assemble -x assembleRelease -x jsBrowserProductionWebpack -x wasmJsBrowserProductionWebpack -x compileProductionExecutableKotlinWasmJs -x linkReleaseFrameworkIosArm64 -x linkReleaseFrameworkIosX64 -x linkReleaseFrameworkIosFat -x linkReleaseFrameworkIosSimulatorArm64
+        run: ./gradlew assemble -x assembleRelease -x wasmJsBrowserProductionWebpack -x compileProductionExecutableKotlinWasmJs
 
   detekt:
     runs-on: ubuntu-latest
