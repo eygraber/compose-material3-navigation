@@ -1,0 +1,54 @@
+[versions]
+agp = "8.7.2"
+
+android-sdk-compile = "35"
+android-sdk-target = "35"
+android-sdk-min = "21"
+
+composeJetbrains = "1.7.1"
+composeLifecycle = "2.8.4"
+
+conventions = "0.0.78"
+
+detekt = "1.23.7"
+detektEygraber = "1.0.11"
+
+dokka = "1.9.20"
+
+kotlin = "2.0.21"
+
+kotlinx-coroutines = "1.9.0"
+
+ktlint = "1.4.1"
+
+publish = "0.30.0"
+
+[plugins]
+conventions = { id = "com.eygraber.conventions", version.ref = "conventions" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[libraries]
+androidx-activity-compose = "androidx.activity:activity-compose:1.9.3"
+
+buildscript-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+buildscript-androidCacheFix = { module = "gradle.plugin.org.gradle.android:android-cache-fix-gradle-plugin", version = "3.0.1" }
+buildscript-compose-compiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+buildscript-compose-jetbrains = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeJetbrains" }
+buildscript-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+buildscript-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+buildscript-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+buildscript-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "publish" }
+
+compose-navigation = "org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10"
+
+detektEygraber-formatting = { module = "com.eygraber.detekt.rules:formatting", version.ref = "detektEygraber" }
+detektEygraber-style = { module = "com.eygraber.detekt.rules:style", version.ref = "detektEygraber" }
+
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+
+# not actually used; just here so renovate picks it up
+ktlint = { module = "com.pinterest.ktlint:ktlint-bom", version.ref = "ktlint" }
+
