@@ -56,7 +56,7 @@ repositories {
 }
 
 dependencies {
-  implementation("com.eygraber:compose-material3-navigation:0.0.2")
+  implementation("com.eygraber:compose-material3-navigation:0.0.3")
 }
 ```
 
