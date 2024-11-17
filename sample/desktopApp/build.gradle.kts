@@ -12,6 +12,7 @@ group = "sample-desktop"
 dependencies {
   implementation(projects.sample.shared)
   implementation(compose.desktop.currentOs)
+  implementation(libs.kotlinx.coroutines.swing)
 }
 
 compose.desktop {
