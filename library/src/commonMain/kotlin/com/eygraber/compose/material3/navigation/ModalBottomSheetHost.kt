@@ -3,9 +3,14 @@
 package com.eygraber.compose.material3.navigation
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -16,14 +21,27 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.LocalOwnersProvider
 
 @Composable
-public fun ModalBottomSheetHost(modalBottomSheetNavigator: ModalBottomSheetNavigator) {
+public fun ModalBottomSheetHost(
+  modalBottomSheetNavigator: ModalBottomSheetNavigator,
+  sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
+  shape: Shape = BottomSheetDefaults.ExpandedShape,
+  containerColor: Color = BottomSheetDefaults.ContainerColor,
+  contentColor: Color = contentColorFor(containerColor),
+  tonalElevation: Dp = 0.dp,
+  scrimColor: Color = BottomSheetDefaults.ScrimColor,
+  dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
+) {
   val saveableStateHolder = rememberSaveableStateHolder()
   val bottomSheetBackStack by modalBottomSheetNavigator.backStack.collectAsState()
   val visibleBackStack = rememberVisibleList(bottomSheetBackStack)
@@ -38,8 +56,25 @@ public fun ModalBottomSheetHost(modalBottomSheetNavigator: ModalBottomSheetNavig
     ModalBottomSheet(
       onDismissRequest = { modalBottomSheetNavigator.dismiss(backStackEntry) },
       sheetState = sheetState,
+      sheetMaxWidth = sheetMaxWidth,
+      shape = shape,
       properties = destination.properties,
-      contentWindowInsets = { WindowInsets.safeDrawing },
+      containerColor = containerColor,
+      contentColor = contentColor,
+      tonalElevation = tonalElevation,
+      scrimColor = scrimColor,
+      dragHandle = dragHandle,
+      contentWindowInsets = {
+        when(sheetState.targetValue) {
+          SheetValue.PartiallyExpanded ->
+            WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+
+          else -> when(sheetState.currentValue) {
+            SheetValue.Expanded -> WindowInsets.safeDrawing
+            else -> WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+          }
+        }
+      },
     ) {
       DisposableEffect(backStackEntry) {
         bottomSheetsToDispose.add(backStackEntry)
