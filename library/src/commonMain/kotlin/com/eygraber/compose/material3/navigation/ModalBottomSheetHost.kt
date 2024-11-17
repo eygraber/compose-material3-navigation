@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -41,6 +42,12 @@ public fun ModalBottomSheetHost(
   tonalElevation: Dp = 0.dp,
   scrimColor: Color = BottomSheetDefaults.ScrimColor,
   dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
+  contentWindowInsets: @Composable (SheetState) -> WindowInsets = { sheetState ->
+    when(sheetState.targetValue) {
+      SheetValue.Expanded -> WindowInsets.safeDrawing
+      else -> WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
+    }
+  },
 ) {
   val saveableStateHolder = rememberSaveableStateHolder()
   val bottomSheetBackStack by modalBottomSheetNavigator.backStack.collectAsState()
@@ -65,15 +72,7 @@ public fun ModalBottomSheetHost(
       scrimColor = scrimColor,
       dragHandle = dragHandle,
       contentWindowInsets = {
-        when(sheetState.targetValue) {
-          SheetValue.PartiallyExpanded ->
-            WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-
-          else -> when(sheetState.currentValue) {
-            SheetValue.Expanded -> WindowInsets.safeDrawing
-            else -> WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-          }
-        }
+        contentWindowInsets(sheetState)
       },
     ) {
       DisposableEffect(backStackEntry) {
