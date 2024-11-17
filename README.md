@@ -17,6 +17,8 @@ fun MyApp() {
 }
 ```
 2. Wrap your `NavHost` in the `ModalBottomSheetLayout` composable that accepts a `ModalBottomSheetNavigator`.
+> [!IMPORTANT]
+> It is important that `NavHost` is called within the same composition as `ModalBottomSheetLayout` (e.g. don't wrap `NavHost` in a `SubcomposeLayout` like `Scaffold`, etc...)
 ```kotlin
 @Composable
 fun MyApp() {

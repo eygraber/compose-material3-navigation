@@ -45,6 +45,7 @@ dependencies {
   implementation(projects.sample.shared)
 
   implementation(libs.androidx.activity.compose)
+  implementation(libs.kotlinx.coroutines.android)
 }
 
 gradleConventions.kotlin {
