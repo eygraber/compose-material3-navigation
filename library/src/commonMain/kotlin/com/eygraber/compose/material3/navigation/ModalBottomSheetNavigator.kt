@@ -2,6 +2,7 @@ package com.eygraber.compose.material3.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -48,7 +49,7 @@ public expect class ModalBottomSheetNavigator() : Navigator<ModalBottomSheetNavi
   @Suppress("UnusedPrivateProperty")
   public class Destination @ExperimentalMaterial3Api constructor(
     navigator: ModalBottomSheetNavigator,
-    properties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
+    properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
     skipPartiallyExpanded: Boolean = false,
     content: @Composable (NavBackStackEntry) -> Unit,
   ) : NavDestination, FloatingWindow {
