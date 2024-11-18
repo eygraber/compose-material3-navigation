@@ -10,6 +10,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import com.eygraber.compose.material3.navigation.ModalBottomSheetNavigator.Destination
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Navigator that navigates through [Composable]s that will be hosted within a [ModalBottomSheet]. Every
@@ -17,16 +18,20 @@ import com.eygraber.compose.material3.navigation.ModalBottomSheetNavigator.Desti
  * instantiated [Destination] or calling [bottomSheet].
  */
 @Navigator.Name("modalBottomSheet")
-public actual class ModalBottomSheetNavigator actual constructor() :
-  Navigator<Destination>() {
-
+public actual class ModalBottomSheetNavigator actual constructor() : Navigator<Destination>() {
   /** Get the back stack from the [state]. */
   internal actual val backStack
-    get() = state.backStack
+    get() = when {
+      isAttached -> state.backStack
+      else -> MutableStateFlow(emptyList())
+    }
 
   /** Get the transitioning modal bottom sheets from the [state]. */
   internal actual val transitionInProgress
-    get() = state.transitionsInProgress
+    get() = when {
+      isAttached -> state.transitionsInProgress
+      else -> MutableStateFlow(emptySet())
+    }
 
   /** Dismiss the modal bottom sheets destination associated with the given [backStackEntry]. */
   internal actual fun dismiss(backStackEntry: NavBackStackEntry) {
