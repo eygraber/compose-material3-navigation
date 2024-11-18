@@ -22,7 +22,7 @@ public fun rememberModalBottomSheetNavigator(): ModalBottomSheetNavigator = reme
  * destination using this Navigator must set a valid [Composable] by setting it directly on an
  * instantiated [Destination] or calling [bottomSheet].
  */
-public expect class ModalBottomSheetNavigator() : Navigator<ModalBottomSheetNavigator.Destination> {
+public expect class ModalBottomSheetNavigator() : Navigator<Destination> {
 
   /** Get the back stack from the [state]. */
   internal val backStack: StateFlow<List<NavBackStackEntry>>
