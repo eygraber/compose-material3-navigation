@@ -1,9 +1,12 @@
 package com.eygraber.compose.material3.navigation
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.FloatingWindow
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
@@ -69,12 +72,14 @@ public actual class ModalBottomSheetNavigator actual constructor() : Navigator<D
   public actual class Destination @ExperimentalMaterial3Api
   actual constructor(
     navigator: ModalBottomSheetNavigator,
+    internal actual val modifier: Modifier,
     internal actual val properties: ModalBottomSheetProperties,
     internal actual val skipPartiallyExpanded: Boolean,
+    internal actual val contentWindowInsets: @Composable (SheetState) -> WindowInsets,
     internal actual val content: @Composable (NavBackStackEntry) -> Unit,
   ) : NavDestination(navigator), FloatingWindow
 
-  internal actual companion object {
+  public actual companion object {
     internal actual const val NAME = "modalBottomSheet"
   }
 }

@@ -1,11 +1,15 @@
 package com.eygraber.compose.material3.navigation
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.navigation.FloatingWindow
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
@@ -49,19 +53,33 @@ public expect class ModalBottomSheetNavigator() : Navigator<Destination> {
   @Suppress("UnusedPrivateProperty")
   public class Destination @ExperimentalMaterial3Api constructor(
     navigator: ModalBottomSheetNavigator,
+    modifier: Modifier = Modifier,
     properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
     skipPartiallyExpanded: Boolean = false,
+    contentWindowInsets: @Composable (SheetState) -> WindowInsets = defaultWindowInsets(),
     content: @Composable (NavBackStackEntry) -> Unit,
   ) : NavDestination, FloatingWindow {
     internal val content: @Composable (NavBackStackEntry) -> Unit
+
+    internal val modifier: Modifier
 
     @ExperimentalMaterial3Api
     internal val properties: ModalBottomSheetProperties
 
     internal val skipPartiallyExpanded: Boolean
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    internal val contentWindowInsets: @Composable (SheetState) -> WindowInsets
   }
 
-  internal companion object {
+  public companion object {
     internal val NAME: String
   }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+public fun ModalBottomSheetNavigator.Companion.defaultWindowInsets(): @Composable (
+  SheetState,
+) -> WindowInsets = {
+  BottomSheetDefaults.windowInsets
 }
