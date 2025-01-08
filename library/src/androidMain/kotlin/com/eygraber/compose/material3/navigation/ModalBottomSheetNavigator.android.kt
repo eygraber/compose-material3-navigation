@@ -7,6 +7,7 @@ import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.util.fastForEach
 import androidx.navigation.FloatingWindow
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
@@ -50,7 +51,7 @@ public actual class ModalBottomSheetNavigator actual constructor() : Navigator<D
     navOptions: NavOptions?,
     navigatorExtras: Extras?,
   ) {
-    entries.forEach { entry -> state.push(entry) }
+    entries.fastForEach { entry -> state.pushWithTransition(entry) }
   }
 
   @ExperimentalMaterial3Api
@@ -58,13 +59,6 @@ public actual class ModalBottomSheetNavigator actual constructor() : Navigator<D
 
   actual override fun popBackStack(popUpTo: NavBackStackEntry, savedState: Boolean) {
     state.popWithTransition(popUpTo, savedState)
-    // When popping, the incoming modal bottom sheet is marked transitioning to hold it in
-    // STARTED. With pop complete, we can remove it from transition so it can move to RESUMED.
-    val popIndex = state.transitionsInProgress.value.indexOf(popUpTo)
-    // do not mark complete for entries up to and including popUpTo
-    state.transitionsInProgress.value.forEachIndexed { index, entry ->
-      if(index > popIndex) onTransitionComplete(entry)
-    }
   }
 
   /** NavDestination specific to [ModalBottomSheetNavigator] */

@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
@@ -22,10 +23,11 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.LocalOwnersProvider
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun ModalBottomSheetHost(
   modalBottomSheetNavigator: ModalBottomSheetNavigator,
@@ -40,7 +42,8 @@ public fun ModalBottomSheetHost(
   val saveableStateHolder = rememberSaveableStateHolder()
   val bottomSheetBackStack by modalBottomSheetNavigator.backStack.collectAsState()
   val visibleBackStack = rememberVisibleList(bottomSheetBackStack)
-  visibleBackStack.PopulateVisibleList(bottomSheetBackStack)
+
+  val scope = rememberCoroutineScope()
 
   val transitionInProgress by modalBottomSheetNavigator.transitionInProgress.collectAsState()
   val bottomSheetsToDispose = remember { mutableStateListOf<NavBackStackEntry>() }
@@ -48,6 +51,13 @@ public fun ModalBottomSheetHost(
   visibleBackStack.forEach { backStackEntry ->
     val destination = backStackEntry.destination as ModalBottomSheetNavigator.Destination
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = destination.skipPartiallyExpanded)
+
+    BackHandler {
+      scope.launch {
+        sheetState.hide()
+      }
+    }
+
     ModalBottomSheet(
       onDismissRequest = { modalBottomSheetNavigator.dismiss(backStackEntry) },
       sheetState = sheetState,
@@ -90,37 +100,6 @@ public fun ModalBottomSheetHost(
       ) {
         modalBottomSheetNavigator.onTransitionComplete(entry)
       }
-    }
-  }
-}
-
-@Composable
-internal fun MutableList<NavBackStackEntry>.PopulateVisibleList(
-  backStack: Collection<NavBackStackEntry>,
-) {
-  val isInspecting = LocalInspectionMode.current
-  backStack.forEach { entry ->
-    DisposableEffect(entry.lifecycle) {
-      val observer = LifecycleEventObserver { _, event ->
-        // show bottomSheet in preview
-        if(isInspecting && !contains(entry)) {
-          add(entry)
-        }
-        // ON_START -> add to visibleBackStack, ON_STOP -> remove from visibleBackStack
-        if(event == Lifecycle.Event.ON_START) {
-          // We want to treat the visible lists as Sets but we want to keep
-          // the functionality of mutableStateListOf() so that we recompose in response
-          // to adds and removes.
-          if(!contains(entry)) {
-            add(entry)
-          }
-        }
-        if(event == Lifecycle.Event.ON_STOP) {
-          remove(entry)
-        }
-      }
-      entry.lifecycle.addObserver(observer)
-      onDispose { entry.lifecycle.removeObserver(observer) }
     }
   }
 }
