@@ -124,7 +124,7 @@ fun App() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.TopCenter,
               ) {
-                Text("This is a bottom sheet that skips the partial state")
+                Text("This is a bottom sheet that goes edge to edge")
               }
             }
           }
