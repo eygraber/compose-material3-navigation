@@ -40,7 +40,6 @@ public fun ModalBottomSheetLayout(
   contentColor: Color = contentColorFor(containerColor),
   tonalElevation: Dp = 0.dp,
   scrimColor: Color = BottomSheetDefaults.ScrimColor,
-  dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
   content: @Composable () -> Unit,
 ) {
   content()
@@ -52,6 +51,5 @@ public fun ModalBottomSheetLayout(
     contentColor = contentColor,
     tonalElevation = tonalElevation,
     scrimColor = scrimColor,
-    dragHandle = dragHandle,
   )
 }

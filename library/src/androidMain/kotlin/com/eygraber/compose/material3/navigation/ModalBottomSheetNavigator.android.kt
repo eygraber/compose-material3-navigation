@@ -5,6 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastForEach
@@ -69,7 +70,9 @@ public actual class ModalBottomSheetNavigator actual constructor() : Navigator<D
     internal actual val modifier: Modifier,
     internal actual val properties: ModalBottomSheetProperties,
     internal actual val skipPartiallyExpanded: Boolean,
+    internal actual val confirmValueChange: (SheetValue) -> Boolean,
     internal actual val contentWindowInsets: @Composable (SheetState) -> WindowInsets,
+    internal actual val dragHandle: @Composable (() -> Unit)?,
     internal actual val content: @Composable (NavBackStackEntry) -> Unit,
   ) : NavDestination(navigator), FloatingWindow
 
