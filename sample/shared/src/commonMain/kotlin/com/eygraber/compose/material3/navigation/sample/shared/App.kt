@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -52,8 +53,8 @@ fun App() {
   MaterialTheme(
     colorScheme = if(isSystemInDarkTheme()) darkColorScheme() else lightColorScheme(),
   ) {
-    Surface {
-      Box(modifier = Modifier.fillMaxSize()) {
+    Scaffold { contentPadding ->
+      Box(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
         ModalBottomSheetLayout(bottomSheetNavigator) {
           NavHost(
             navController = navController,

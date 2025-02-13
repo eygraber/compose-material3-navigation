@@ -5,6 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SheetValue.Expanded
 import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.runtime.Composable
@@ -30,7 +31,11 @@ public class ModalBottomSheetNavigatorDestinationBuilder :
   private val skipPartiallyExpanded: Boolean
 
   @OptIn(ExperimentalMaterial3Api::class)
+  private val confirmValueChange: (SheetValue) -> Boolean
+
+  @OptIn(ExperimentalMaterial3Api::class)
   private val contentWindowInsets: @Composable (SheetState) -> WindowInsets
+  private val dragHandle: @Composable (() -> Unit)?
   private val content: @Composable (NavBackStackEntry) -> Unit
 
   /**
@@ -44,7 +49,9 @@ public class ModalBottomSheetNavigatorDestinationBuilder :
    * @param skipPartiallyExpanded Whether the partially expanded state, if the sheet is tall enough,
    *   should be skipped. If true, the sheet will always expand to the [Expanded] state and move to
    *   the [Hidden] state when hiding the sheet, either programmatically or by user interaction.
+   * @param confirmValueChange Optional callback invoked to confirm or veto a pending state change.
    * @param contentWindowInsets window insets to be passed to the bottom sheet content via PaddingValues params.
+   * @param dragHandle Optional visual marker to swipe the bottom sheet.
    * @param content composable for the destination
    */
   @ExperimentalMaterial3Api
@@ -54,14 +61,18 @@ public class ModalBottomSheetNavigatorDestinationBuilder :
     modifier: Modifier,
     modalBottomSheetProperties: ModalBottomSheetProperties,
     skipPartiallyExpanded: Boolean,
+    confirmValueChange: (SheetValue) -> Boolean,
     contentWindowInsets: @Composable (SheetState) -> WindowInsets,
+    dragHandle: @Composable (() -> Unit)?,
     content: @Composable (NavBackStackEntry) -> Unit,
   ) : super(navigator, route) {
     this.modalBottomSheetNavigator = navigator
     this.modifier = modifier
     this.modalBottomSheetProperties = modalBottomSheetProperties
     this.skipPartiallyExpanded = skipPartiallyExpanded
+    this.confirmValueChange = confirmValueChange
     this.contentWindowInsets = contentWindowInsets
+    this.dragHandle = dragHandle
     this.content = content
   }
 
@@ -78,7 +89,9 @@ public class ModalBottomSheetNavigatorDestinationBuilder :
    * @param skipPartiallyExpanded Whether the partially expanded state, if the sheet is tall enough,
    *   should be skipped. If true, the sheet will always expand to the [Expanded] state and move to
    *   the [Hidden] state when hiding the sheet, either programmatically or by user interaction.
+   * @param confirmValueChange Optional callback invoked to confirm or veto a pending state change.
    * @param contentWindowInsets window insets to be passed to the bottom sheet content via PaddingValues params.
+   * @param dragHandle Optional visual marker to swipe the bottom sheet.
    * @param content composable for the destination
    */
   @ExperimentalMaterial3Api
@@ -89,14 +102,18 @@ public class ModalBottomSheetNavigatorDestinationBuilder :
     modifier: Modifier,
     modalBottomSheetProperties: ModalBottomSheetProperties,
     skipPartiallyExpanded: Boolean,
+    confirmValueChange: (SheetValue) -> Boolean,
     contentWindowInsets: @Composable (SheetState) -> WindowInsets,
+    dragHandle: @Composable (() -> Unit)?,
     content: @Composable (NavBackStackEntry) -> Unit,
   ) : super(navigator, route, typeMap) {
     this.modalBottomSheetNavigator = navigator
     this.modifier = modifier
     this.modalBottomSheetProperties = modalBottomSheetProperties
     this.skipPartiallyExpanded = skipPartiallyExpanded
+    this.confirmValueChange = confirmValueChange
     this.contentWindowInsets = contentWindowInsets
+    this.dragHandle = dragHandle
     this.content = content
   }
 
@@ -106,7 +123,9 @@ public class ModalBottomSheetNavigatorDestinationBuilder :
     modifier,
     modalBottomSheetProperties,
     skipPartiallyExpanded,
+    confirmValueChange,
     contentWindowInsets,
+    dragHandle,
     content,
   )
 }

@@ -7,6 +7,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -56,7 +57,9 @@ public expect class ModalBottomSheetNavigator() : Navigator<Destination> {
     modifier: Modifier = Modifier,
     properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
     skipPartiallyExpanded: Boolean = false,
+    confirmValueChange: (SheetValue) -> Boolean = { true },
     contentWindowInsets: @Composable (SheetState) -> WindowInsets = defaultWindowInsets(),
+    dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
     content: @Composable (NavBackStackEntry) -> Unit,
   ) : NavDestination, FloatingWindow {
     internal val content: @Composable (NavBackStackEntry) -> Unit
@@ -68,8 +71,13 @@ public expect class ModalBottomSheetNavigator() : Navigator<Destination> {
 
     internal val skipPartiallyExpanded: Boolean
 
+    @ExperimentalMaterial3Api
+    internal val confirmValueChange: (SheetValue) -> Boolean
+
     @OptIn(ExperimentalMaterial3Api::class)
     internal val contentWindowInsets: @Composable (SheetState) -> WindowInsets
+
+    internal val dragHandle: @Composable (() -> Unit)?
   }
 
   public companion object {

@@ -37,7 +37,6 @@ public fun ModalBottomSheetHost(
   contentColor: Color = contentColorFor(containerColor),
   tonalElevation: Dp = 0.dp,
   scrimColor: Color = BottomSheetDefaults.ScrimColor,
-  dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
 ) {
   val saveableStateHolder = rememberSaveableStateHolder()
   val bottomSheetBackStack by modalBottomSheetNavigator.backStack.collectAsState()
@@ -50,11 +49,16 @@ public fun ModalBottomSheetHost(
 
   visibleBackStack.forEach { backStackEntry ->
     val destination = backStackEntry.destination as ModalBottomSheetNavigator.Destination
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = destination.skipPartiallyExpanded)
+    val sheetState = rememberModalBottomSheetState(
+      skipPartiallyExpanded = destination.skipPartiallyExpanded,
+      confirmValueChange = destination.confirmValueChange,
+    )
 
-    BackHandler {
-      scope.launch {
-        sheetState.hide()
+    if(destination.properties.shouldDismissOnBackPress) {
+      BackHandler {
+        scope.launch {
+          sheetState.hide()
+        }
       }
     }
 
@@ -69,7 +73,7 @@ public fun ModalBottomSheetHost(
       contentColor = contentColor,
       tonalElevation = tonalElevation,
       scrimColor = scrimColor,
-      dragHandle = dragHandle,
+      dragHandle = destination.dragHandle,
       contentWindowInsets = {
         destination.contentWindowInsets(sheetState)
       },
