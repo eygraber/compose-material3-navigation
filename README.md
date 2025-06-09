@@ -60,4 +60,4 @@ dependencies {
 }
 ```
 
-Snapshots can be found [here](https://s01.oss.sonatype.org/content/repositories/snapshots/com/eygraber/compose-material3-navigation).
+Snapshots can be found [here](https://central.sonatype.org/publish/publish-portal-snapshots/#consuming-via-gradle).
